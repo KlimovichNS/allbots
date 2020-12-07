@@ -470,7 +470,7 @@ def callback(call):
                 all_count = str(np.format_float_positional(all_count))[0:-1]
                 type_oper = str(np.format_float_positional(type_oper))[0:-1]
                 type_date = str(np.format_float_positional(type_date))[0:-1]
-                message_to_send = Bold('Общая статистика') + '\n'+ 'количество организаций: ' + all_count + '\n' + 'cтатус интеграции: '+ '\n' + 'Расчет з/п : ' + status_delt +'_ (' + delt_perc + '%)_'  + '\n' + 'Сверка первичных сведений: ' + status_perv +' _(' + perv_perc + '%)_' + '\n' + 'не приступивших: ' + status_not_start + ' _(' + not_perc + '%)_' +'\n' + 'Расчет з/п: ' + '\n' + 'По данным ЕИСУ КС: ' + type_oper +' _(' + oper_perc + '%)_'  + '\n' + 'Сверка прошлых периодов: ' + type_date +'_ (' + date_perc + '%)_'  
+                message_to_send = Bold('Общая статистика') + '\n'+ 'количество организаций: ' + all_count + '\n' + 'cтатус интеграции: '+ '\n' + 'не приступивших: ' + status_not_start + ' _(' + not_perc + '%)_' +'\n' + 'Сверка первичных сведений: ' + status_perv +' _(' + perv_perc + '%)_' + '\n'  + 'Расчет з/п: ' + status_delt +'_ (' + delt_perc + '%)_'  + '\n Из них:\n' + '- Сверка прошлых периодов: ' + type_date +'_ (' + date_perc + '%)_ \n' + '- По данным ЕИСУ КС: ' + type_oper +' _(' + oper_perc + '%)_'  + '\n'   
                 markup = telebot.types.InlineKeyboardMarkup()
                 markup.add(telebot.types.InlineKeyboardButton(text='Назад', callback_data='Общая статистика'))
                 #bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -591,20 +591,23 @@ def code_input(message):
                     bot.send_message(message.from_user.id, text=message_to_send, reply_markup=markup, parse_mode= "Markdown")
 
                     markup = telebot.types.InlineKeyboardMarkup()
+                    markup.add(telebot.types.InlineKeyboardButton(text='Детализация', callback_data='Дельта'))
+                    message_to_send = 'Расчет з/п(общий): ' + status_delt +'_ (' + delt_perc + '%)_'
+                    bot.send_message(message.from_user.id, text=message_to_send, reply_markup=markup, parse_mode= "Markdown")
+
+                    markup = telebot.types.InlineKeyboardMarkup()
                     markup.add(telebot.types.InlineKeyboardButton(text='Детализация', callback_data='Дата документа'))
-                    message_to_send = 'Cверка предыдущих периодов: ' + type_date +' _(' + date_perc + '%)_'
+                    message_to_send = 'Расчет з/п - сверка предыдущих периодов: ' + type_date +' _(' + date_perc + '%)_'
                     bot.send_message(message.from_user.id, text=message_to_send, reply_markup=markup, parse_mode= "Markdown")
 
                     markup = telebot.types.InlineKeyboardMarkup()
                     markup.add(telebot.types.InlineKeyboardButton(text='Детализация', callback_data='Операторская дата'))
-                    message_to_send = 'Расчет з/п по данным ЕИСУ КС: ' + type_oper +' _(' + oper_perc + '%)_'
+                    markup.add(telebot.types.InlineKeyboardButton(text='Назад', callback_data='Общая статистика'),telebot.types.InlineKeyboardButton(text='В начало', callback_data='start'))
+                    message_to_send = 'Расчет з/п - по данным ЕИСУ КС: ' + type_oper +' _(' + oper_perc + '%)_'
                     bot.send_message(message.from_user.id, text=message_to_send, reply_markup=markup, parse_mode= "Markdown")
 
-                    markup = telebot.types.InlineKeyboardMarkup()
-                    markup.add(telebot.types.InlineKeyboardButton(text='Детализация', callback_data='Дельта'))
-                    markup.add(telebot.types.InlineKeyboardButton(text='Назад', callback_data='Общая статистика'),telebot.types.InlineKeyboardButton(text='В начало', callback_data='start'))
-                    message_to_send = 'Расчет з/п(общий): ' + status_delt +'_ (' + delt_perc + '%)_'
-                    bot.send_message(message.from_user.id, text=message_to_send, reply_markup=markup, parse_mode= "Markdown")
+                    
+                    
                     
                     state[message.from_user.id] = BK
                     
