@@ -172,12 +172,12 @@ def callback(call):
                 kura.loc[kura['Переключение'] == 'операторская дата', 'Переключение'] = "операторская"
                 kura.loc[kura['Переключение'] == 'дата документа ', 'Переключение'] = "дата документа"
                 kura['Переключение'] = kura['Переключение'].fillna('----')
-                foiv_first = kura.query('БК == @BK')
+                foiv = kura.query('БК == @BK')
                 status = state[user_id]
                 if status == 'Расчет по данным ЕИСУ КС' or status == 'Сверка прошлых периодов':
-                        foiv = foiv_first .query('Переключение == @status')
+                        foiv = foiv.query('Переключение == @status')
                 elif status == 'Расчет зарплаты(общий)' or status == 'Сверка первичных сведений' or status == 'не приступали':
-                        foiv = foiv_first .query('Статус == @status')
+                        foiv = foiv.query('Статус == @status')
                 foiv = foiv.reset_index()
                 message_to_send ='*Статус интеграции по списку:*\n' + Bold('Не приступали') +'\n'+'код главы: ' + BK + '\n' +'~~~~~~~~~~\n'
                 if foiv.empty == False:
@@ -238,12 +238,12 @@ def callback(call):
                 kura.loc[kura['Переключение'] == 'операторская дата', 'Переключение'] = "операторская"
                 kura.loc[kura['Переключение'] == 'дата документа ', 'Переключение'] = "дата документа"
                 kura['Переключение'] = kura['Переключение'].fillna('----')
-                foiv_first = kura.query('БК == @BK')
+                foiv= kura.query('БК == @BK')
                 status = state[user_id]
                 if status == 'Расчет по данным ЕИСУ КС' or status == 'Сверка прошлых периодов':
-                        foiv = foiv_first .query('Переключение == @status')
+                        foiv = foiv.query('Переключение == @status')
                 elif status == 'Расчет зарплаты(общий)' or status == 'Сверка первичных сведений' or status == 'не приступали':
-                        foiv = foiv_first .query('Статус == @status')
+                        foiv = foiv.query('Статус == @status')
                 foiv = foiv.reset_index()
                 message_to_send ='*Статус интеграции по списку:*\n' + Bold('Расчет з/п(общий)') +'\n'+'код главы: ' + BK + '\n' +'~~~~~~~~~~\n'
                 if foiv.empty == False:
@@ -291,12 +291,12 @@ def callback(call):
                 kura.loc[kura['Переключение'] == 'операторская дата', 'Переключение'] = "операторская"
                 kura.loc[kura['Переключение'] == 'дата документа ', 'Переключение'] = "дата документа"
                 kura['Переключение'] = kura['Переключение'].fillna('----')
-                foiv_first = kura.query('БК == @BK')
+                foiv = kura.query('БК == @BK')
                 status = state[user_id]
                 if status == 'Расчет по данным ЕИСУ КС' or status == 'Сверка прошлых периодов':
-                        foiv = foiv_first .query('Переключение == @status')
+                        foiv = foiv .query('Переключение == @status')
                 elif status == 'Расчет зарплаты(общий)' or status == 'Сверка первичных сведений' or status == 'не приступали':
-                        foiv = foiv_first .query('Статус == @status')
+                        foiv = foiv .query('Статус == @status')
                         
                 foiv = foiv.reset_index()
                 message_to_send ='*Статус интеграции по списку:*\n' + Bold('Сверка первичных сведений') +'\n'+'код главы: ' + BK  + '\n' +'~~~~~~~~~~\n'
@@ -344,12 +344,12 @@ def callback(call):
                     kura.loc[kura['Переключение'] == 'операторская дата', 'Переключение'] = "операторская"
                     kura.loc[kura['Переключение'] == 'дата документа ', 'Переключение'] = "дата документа"
                     kura['Переключение'] = kura['Переключение'].fillna('----')
-                    foiv_first = kura.query('БК == @BK')
+                    foiv = kura.query('БК == @BK')
                     status = state[user_id]
                     if status == 'операторская' or status == 'дата документа':
-                            foiv = foiv_first .query('Переключение == @status')
+                            foiv = foiv .query('Переключение == @status')
                     elif status == 'дельта' or status == 'первичный' or status == 'не приступали':
-                            foiv = foiv_first .query('Статус == @status')
+                            foiv = foiv .query('Статус == @status')
                     foiv = foiv.reset_index()
                     message_to_send ='*Статус интеграции по списку:*\n' + Bold('Расчет з/п по данным ЕИСУ КС') +'\n'+'код главы: ' + BK  + '\n' +'~~~~~~~~~~\n'
                     if foiv.empty == False:
@@ -397,12 +397,12 @@ def callback(call):
                 kura.loc[kura['Переключение'] == 'операторская дата', 'Переключение'] = "операторская"
                 kura.loc[kura['Переключение'] == 'дата документа ', 'Переключение'] = "дата документа"
                 kura['Переключение'] = kura['Переключение'].fillna('----')
-                foiv_first = kura.query('БК == @BK')
+                foiv = kura.query('БК == @BK')
                 status = state[user_id]
                 if status == 'Расчет по данным ЕИСУ КС' or status == 'Сверка прошлых периодов':
-                        foiv = foiv_first .query('Переключение == @status')
+                        foiv = foiv .query('Переключение == @status')
                 elif status == 'Расчет зарплаты(общий)' or status == 'Сверка первичных сведений' or status == 'не приступали':
-                        foiv = foiv_first .query('Статус == @status')
+                        foiv = foiv .query('Статус == @status')
                 foiv = foiv.reset_index()
                 message_to_send ='*Статус интеграции по списку:*\n' + Bold('Сверка расчетов за предыдущие периоды') +'\n'+'код главы: ' + BK  + '\n' +'~~~~~~~~~~\n'
                 if foiv.empty == False:
@@ -633,12 +633,13 @@ def code_input(message):
                     kura.loc[kura['Переключение'] == 'операторская дата', 'Переключение'] = "операторская"
                     kura.loc[kura['Переключение'] == 'дата документа ', 'Переключение'] = "дата документа"
                     kura['Переключение'] = kura['Переключение'].fillna('----')
-                    foiv_first = kura.query('БК == @BK')
+                    foiv = kura.query('БК == @BK')
+                    
                     status = state[message.from_user.id]
                     if status == 'Расчет по данным ЕИСУ КС' or status == 'Сверка прошлых периодов':
-                        foiv = foiv_first .query('Переключение == @status')
+                        foiv = foiv.query('Переключение == @status')
                     elif status == 'Расчет зарплаты(общий)' or status == 'Сверка первичных сведений' or status == 'не приступали':
-                        foiv = foiv_first .query('Статус == @status')
+                        foiv = foiv.query('Статус == @status')
                     foiv = foiv.reset_index()
                     message_to_send ='*Статус интеграции по списку:*\n' + Bold(state[message.from_user.id]) +'\n'+'код главы: ' + BK + '\n' + 'находятся на : ' + status  + '\n' +'~~~~~~~~~~\n'
                     if foiv.empty == False:
