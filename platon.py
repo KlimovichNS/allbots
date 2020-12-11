@@ -9,7 +9,7 @@ import numpy as np
 #bot = telebot.TeleBot('1171523590:AAEvAeI-ICnoQZe355KilvGLPmczfbsElxY')#токен для отладки
 bot = telebot.TeleBot('1222655772:AAFqhMIq6-neoYy7_OGcaVBVGOiJ6yR_EC8')
 bot.delete_webhook()
-sheet_id =['1bMzTytAtyy1pWXfdxEyFRdhOrKPF21Wd',#таблица пакетов
+sheet_id =['1hWLgbwO-jNVsHjvcNG2tZDZqn2qX21LoZCyAPPPG9tM',#таблица пакетов
            '12NhRBW9Vw7OyDZtj-G5kq3S736hjdB2KfjU-gD9Am18', #статус интеграции
            '1hrR2lJW32sRmHS5kZPdvRys-dNEYRgTIEGzaOjOJjCk']#список глав по волнам
 state = {}
@@ -662,7 +662,7 @@ def code_input(message):
             markup = telebot.types.InlineKeyboardMarkup()
             markup.add(telebot.types.InlineKeyboardButton(text='Назад', callback_data='start'))
             #bot.send_message(1153266974, text=e, reply_markup=markup)
-            bot.send_message(message.from_user.id, text='Проверьте входные параметры или начните сначала', reply_markup=markup)
+            bot.send_message(message.from_user.id, text='Проверьте код главы или начните сначала, прислав сообщение /start', reply_markup=markup)
         return BKu
                                                
 if __name__ == '__main__':
