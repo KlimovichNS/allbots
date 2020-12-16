@@ -81,12 +81,12 @@ def handle_docs(message):
     with open(file_path, 'wb') as new_file:
         new_file.write(file)
         new_file.close()
-    try:
-        msg = read_table(uid)
-        bot.send_message(uid, text=msg)
-        db_connect.new_table(uid)
-    except:
-        bot.send_message(uid, text='не удалось загрузить файл')
+        try:
+            msg = read_table(uid)
+            bot.send_message(uid, text=msg)
+            db_connect.new_table(uid)
+        except:
+            bot.send_message(uid, text='не удалось загрузить файл')
     
 def polling():
     if __name__ == '__main__':
