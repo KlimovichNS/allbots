@@ -3,3 +3,4 @@ pandas==1.0.5
 pytelegrambotapi==3.7.2
 sqlite3
 openpyxl
+telethon

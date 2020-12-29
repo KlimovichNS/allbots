@@ -14,6 +14,7 @@ sheet_id =['1hWLgbwO-jNVsHjvcNG2tZDZqn2qX21LoZCyAPPPG9tM',#таблица пак
            '1hrR2lJW32sRmHS5kZPdvRys-dNEYRgTIEGzaOjOJjCk']#список глав по волнам
 state = {}
 BKu = {}
+
 tip = '_здесь будет подсказка по кодам глав_'
 tip_bot = ''
 def Bold(string):
@@ -48,7 +49,9 @@ def start_message(message):
     state[user_id] = ''
     BKu[user_id] = ''
     tip = tip_import()#формирование закрепленного сообщения
+    #for x in range(int(message.chat.id),1,-1):
     try:
+       
         bot.unpin_chat_message(message.chat.id)#открепление старого закрепленного
     except:
         pass
@@ -483,9 +486,9 @@ def callback(call):
                 
                 bot.send_message(chat_id=call.message.chat.id, text=message_to_send, reply_markup=markup, parse_mode= "Markdown")
 
-                                         
+        
         return state
-
+    
 @bot.message_handler(content_types=['text']) #пакеты по коду
 def code_input(message):
         global sheet_id, state
@@ -515,21 +518,11 @@ def code_input(message):
                     status_no_problem = str(np.format_float_positional(status_no_problem, precision=2))[:-1]
                     message_to_send = '*Проверка пакетов \n*' +  'Код главы: ' + Bold(BK) + '\n'+ ' ('+ name + ') \n' + 'всего: ' + all_count + '\n' + 'есть ошибки: ' + status_not + '_ (_' + Italic(perc_all) + '_%)_' + '\n' + 'нет ошибок: ' + status_no_problem + '_ (_' + Italic(perc_all_no_problem) + '_%)_'
                     err = 'есть ошибки'
-                    #error_list = 'Проверка пакетов, приложение ' + BK + ':\n'
                     foiv = foiv.query('`статус ошибки` == @err')
                     if foiv.empty == False:
                         foiv = foiv.reset_index()
                         message_to_send += '\n [Отчеты по ошибкам](' + str(foiv.iat[0,5]) + ')'
-                        #str_count = len(error_list)
-                        #for i in range(len(foiv.index)):
-                                #if str_count > 4000 :
-                                    #bot.send_message(message.from_user.id, error_list, parse_mode= "Markdown")
-                                    #error_list = ''
-                                    #str_count = 0
-                                #msg = str(foiv.iat[i,3]) + '\n'
-                                #str_count += len(msg)
-                                #error_list += msg
-                        #bot.send_message(message.from_user.id, error_list, parse_mode= "Markdown")                       
+                                    
 
 
                         
@@ -676,6 +669,7 @@ if __name__ == '__main__':
         print('keep running')
         bot.infinity_polling()
     except Exception as e:
-        print(e)
+        print(e)      
+        print('try to get up')
         time.sleep(1)
         

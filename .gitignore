@@ -1,1 +1,5 @@
 /__pycache__
+.session
+.session-journal
+.db
+/birthday_bot/__pycache__
