@@ -11,15 +11,15 @@ DF = {}
 sheet_id =['1zvPAJP6PNsZ7u37eV9uPCdZB29RCcOpBkTMDf6eXEXE', #статус миграции
            '1hrR2lJW32sRmHS5kZPdvRys-dNEYRgTIEGzaOjOJjCk'] #фоив - БК
 
-#bot = telebot.TeleBot('1171523590:AAEvAeI-ICnoQZe355KilvGLPmczfbsElxY')#отладка
-bot = telebot.TeleBot('1253376897:AAFssJD2m18CBgaVo4xaIR3_yFvonYtYCRw')
+bot = telebot.TeleBot('1171523590:AAEvAeI-ICnoQZe355KilvGLPmczfbsElxY')#отладка
+#bot = telebot.TeleBot('1253376897:AAFssJD2m18CBgaVo4xaIR3_yFvonYtYCRw')
 def Get_Table():
     global sheet_id
     spreadsheet_id = sheet_id[0]
     file_name = 'https://docs.google.com/spreadsheets/d/{}/export?format=csv'.format(spreadsheet_id) 
     r = requests.get(file_name) 
     df = pd.read_csv(BytesIO(r.content), dtype = {'БК':'object'})
-    df  = df[['ФОИВ',"Код БК" , "ПОЛНОЕ НАИМЕНОВАНИЕ", "База получена", "загружено в ЭБ", "проблемы", "протокол (полож, отр)", "заявка на перемиграцию"]]
+    df  = df[['ФОИВ',"Код БК" , "ПОЛНОЕ НАИМЕНОВАНИЕ", "База получена", "загружено в ЭБ", "проблемы при загрузке из ЕИСУКС", "протокол (полож, отр)", "заявка на перемиграцию"]]
     df.columns = ['фоив', "БК", "наименование", "получена", "загружено", "проблемы", "протокол", "перемиграция"]
     df.loc[df['получена'] == 'Не требуется', "получена"] = "не требуется"
     df['протокол'] = df['протокол'].fillna('не получен')
