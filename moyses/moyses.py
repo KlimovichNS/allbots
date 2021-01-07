@@ -11,18 +11,20 @@ DF = {}
 sheet_id =['1zvPAJP6PNsZ7u37eV9uPCdZB29RCcOpBkTMDf6eXEXE', #статус миграции
            '1hrR2lJW32sRmHS5kZPdvRys-dNEYRgTIEGzaOjOJjCk'] #фоив - БК
 
-bot = telebot.TeleBot('1171523590:AAEvAeI-ICnoQZe355KilvGLPmczfbsElxY')#отладка
-#bot = telebot.TeleBot('1253376897:AAFssJD2m18CBgaVo4xaIR3_yFvonYtYCRw')
+#bot = telebot.TeleBot('1171523590:AAEvAeI-ICnoQZe355KilvGLPmczfbsElxY')#отладка
+bot = telebot.TeleBot('1253376897:AAFssJD2m18CBgaVo4xaIR3_yFvonYtYCRw')
 def Get_Table():
     global sheet_id
     spreadsheet_id = sheet_id[0]
     file_name = 'https://docs.google.com/spreadsheets/d/{}/export?format=csv'.format(spreadsheet_id) 
     r = requests.get(file_name) 
     df = pd.read_csv(BytesIO(r.content), dtype = {'БК':'object'})
-    df  = df[['ФОИВ',"Код БК" , "ПОЛНОЕ НАИМЕНОВАНИЕ", "База получена", "загружено в ЭБ", "проблемы при загрузке из ЕИСУКС", "протокол (полож, отр)", "заявка на перемиграцию"]]
+    df  = df[['ФОИВ',"Код БК" , "КРАТКОЕ НАИМЕНОВАНИЕ ОРГАНИЗАЦИИ", "База получена", "Загружено из ЕИСУКС", "проблемы при загрузке из ЕИСУКС ШР", "Протокол (полож, отр)", "заявка на перемиграцию"]]
     df.columns = ['фоив', "БК", "наименование", "получена", "загружено", "проблемы", "протокол", "перемиграция"]
     df.loc[df['получена'] == 'Не требуется', "получена"] = "не требуется"
     df['протокол'] = df['протокол'].fillna('не получен')
+    df['получена'] = df['получена'].fillna('нет')
+    df['загружено'] = df['загружено'].fillna('нет')
     df['перемиграция'] = df['перемиграция'].fillna('не требуется')
     return df
 
@@ -103,35 +105,39 @@ def callback(call):
         markup.add(telebot.types.InlineKeyboardButton(text='Список полученных', callback_data='базы получены'))
         markup.add(telebot.types.InlineKeyboardButton(text='Список неполученных', callback_data='базы не получены'))
         markup.add(telebot.types.InlineKeyboardButton(text='Не требуется передача', callback_data='не требуется'))
+        markup.add(telebot.types.InlineKeyboardButton(text='Назад', callback_data='Выборка по статусу'),telebot.types.InlineKeyboardButton(text='В начало', callback_data='Назад'))
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=msg_text, reply_markup=markup)
 
 
     if call.data == "Загруженные":
         bot.answer_callback_query(call.id, text=call.data)
         user_id = call.from_user.id
-        msg_text = status_count('получена',user_id)
+        msg_text = status_count('загружено',user_id)
         markup = telebot.types.InlineKeyboardMarkup()
         markup.add(telebot.types.InlineKeyboardButton(text='Список загруженных в ЭБ', callback_data='загружены'))
         markup.add(telebot.types.InlineKeyboardButton(text='Список незагруженных в ЭБ', callback_data='не загружены'))
+        markup.add(telebot.types.InlineKeyboardButton(text='Назад', callback_data='Выборка по статусу'),telebot.types.InlineKeyboardButton(text='В начало', callback_data='Назад'))
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=msg_text, reply_markup=markup)
 
     if call.data == "Перемиграция":
         bot.answer_callback_query(call.id, text=call.data)
         user_id = call.from_user.id
-        msg_text = status_count('получена',user_id)
+        msg_text = status_count('перемиграция',user_id)
         markup = telebot.types.InlineKeyboardMarkup()
         markup.add(telebot.types.InlineKeyboardButton(text='Заявки на перемиграцию', callback_data='перемиграция'))
         markup.add(telebot.types.InlineKeyboardButton(text='Перемиграция не требуется', callback_data='не_перемиграция'))
+        markup.add(telebot.types.InlineKeyboardButton(text='Назад', callback_data='Выборка по статусу'),telebot.types.InlineKeyboardButton(text='В начало', callback_data='Назад'))
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=msg_text, reply_markup=markup)
 
     if call.data == "Протоколы":
         bot.answer_callback_query(call.id, text=call.data)
         user_id = call.from_user.id
-        msg_text = status_count('получена',user_id)
+        msg_text = status_count('протокол',user_id)
         markup = telebot.types.InlineKeyboardMarkup()
         markup.add(telebot.types.InlineKeyboardButton(text='Положительные', callback_data='положительные'))
         markup.add(telebot.types.InlineKeyboardButton(text='Отрицательные', callback_data='отрицательные'))
         markup.add(telebot.types.InlineKeyboardButton(text='Не получены', callback_data='протоколы не получены'))
+        markup.add(telebot.types.InlineKeyboardButton(text='Назад', callback_data='Выборка по статусу'),telebot.types.InlineKeyboardButton(text='В начало', callback_data='Назад'))
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=msg_text, reply_markup=markup)
 
     if call.data == "положительные":
@@ -215,8 +221,8 @@ def callback(call):
             markup = telebot.types.InlineKeyboardMarkup()
             markup.add(telebot.types.InlineKeyboardButton(text='Назад', callback_data='Протоколы'),telebot.types.InlineKeyboardButton(text='В начало', callback_data='Назад'))
             bot.send_message(user_id, text=message_to_send, reply_markup=markup, parse_mode= "Markdown")
-        except:
-            bot.send_message(user_id, text='Что-то пошло не так, попробуйте начать командой /start')
+        except Exception as e:
+           bot.send_message(user_id, text='Что-то пошло не так, попробуйте начать командой /start')
     if call.data == "перемиграция":
         bot.answer_callback_query(call.id, text=call.data)
         user_id = call.from_user.id
@@ -277,7 +283,7 @@ def callback(call):
         user_id = call.from_user.id
         try:
             df = DF[user_id]
-            df = df.loc[df['загружено'] == 'да']
+            df = df.loc[df['загружено'] == 'загружено']
             message_to_send = ''
             df = df.reset_index()
             if df.empty == False:
@@ -462,7 +468,7 @@ def callback(call):
         status_not_here = df.loc[df['получена'] == 'нет','БК'].count()
         status_not_matter = df.loc[df['получена'] == 'не требуется','БК'].count()
         # загружено  
-        status_download = df.loc[df['загружено'] == 'да','БК'].count()
+        status_download = df.loc[df['загружено'] == 'загружено','БК'].count()
         status_not_download = df.loc[df['загружено'] == 'нет','БК'].count()
         # протоколы  
         status_plus = df.loc[df['протокол'] == 'положительный','БК'].count()
