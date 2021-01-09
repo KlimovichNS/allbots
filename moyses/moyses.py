@@ -585,7 +585,7 @@ def code_input(message):
         status_not_here = foiv.loc[foiv['получена'] == 'нет','БК'].count()
         status_not_matter = foiv.loc[foiv['получена'] == 'не требуется','БК'].count()
         # загружено  
-        status_download = foiv.loc[foiv['загружено'] == 'да','БК'].count()
+        status_download = foiv.loc[foiv['загружено'] == 'загружено','БК'].count()
         status_not_download = foiv.loc[foiv['загружено'] == 'нет','БК'].count()
         # протоколы  
         status_plus = foiv.loc[foiv['протокол'] == 'положительный','БК'].count()
