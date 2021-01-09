@@ -19,12 +19,13 @@ def Get_Table():
     file_name = 'https://docs.google.com/spreadsheets/d/{}/export?format=csv'.format(spreadsheet_id) 
     r = requests.get(file_name) 
     df = pd.read_csv(BytesIO(r.content), dtype = {'БК':'object'})
-    df  = df[['ФОИВ',"Код БК" , "КРАТКОЕ НАИМЕНОВАНИЕ ОРГАНИЗАЦИИ", "База получена", "Загружено из ЕИСУКС", "проблемы при загрузке из ЕИСУКС ШР", "Протокол (полож, отр)", "заявка на перемиграцию"]]
-    df.columns = ['фоив', "БК", "наименование", "получена", "загружено", "проблемы", "протокол", "перемиграция"]
+    df  = df[['ФОИВ',"Код БК" , "КРАТКОЕ НАИМЕНОВАНИЕ ОРГАНИЗАЦИИ", "База получена", "Загружено из ЕИСУКС", "проблемы при загрузке из ЕИСУКС ШР", "Протокол (полож, отр)", "заявка на перемиграцию", 'Загружено из ВИС']]
+    df.columns = ['фоив', "БК", "наименование", "получена", "загружено", "проблемы", "протокол", "перемиграция", 'загружено_ВИС']
     df.loc[df['получена'] == 'Не требуется', "получена"] = "не требуется"
     df['протокол'] = df['протокол'].fillna('не получен')
     df['получена'] = df['получена'].fillna('нет')
     df['загружено'] = df['загружено'].fillna('нет')
+    df['загружено_ВИС'] = df['загружено_ВИС'].fillna('нет')
     df['перемиграция'] = df['перемиграция'].fillna('не требуется')
     return df
 
@@ -91,12 +92,25 @@ def start_message(message):
     markup = telebot.types.InlineKeyboardMarkup()
     markup.add(telebot.types.InlineKeyboardButton(text='Статистика миграции', callback_data='Статистика миграции'))
     markup.add(telebot.types.InlineKeyboardButton(text='Проблемы миграции', callback_data='Проблемы миграции'))
-    markup.add(telebot.types.InlineKeyboardButton(text='Выборка по статусу', callback_data='Выборка по статусу'))    
+    markup.add(telebot.types.InlineKeyboardButton(text='Выборка по статусу', callback_data='Выборка по статусу'))
+    markup.add(telebot.types.InlineKeyboardButton(text='Статус по учреждению', callback_data='Статус по учреждению'))
     bot.send_message(message.chat.id, text='*Выберите тип запроса*', reply_markup=markup, parse_mode= "Markdown")
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback(call):
     global state, DF
+
+    if call.data == "Статус по учреждению":
+        bot.answer_callback_query(call.id, text=call.data)
+        state[call.from_user.id] = call.data
+        user_id = call.from_user.id
+        msg_text = 'Укажите код по сводному реестру:\n(используйте цифры от 0 до 9 и только латинские буквы)'
+        markup.add(telebot.types.InlineKeyboardButton(text='В начало', callback_data='Назад'))
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=msg_text, reply_markup=markup)
+        
+
+
+    
     if call.data == "Полученные":
         bot.answer_callback_query(call.id, text=call.data)
         user_id = call.from_user.id
@@ -478,12 +492,17 @@ def callback(call):
         # перемиграция  
         status_need = df.loc[df['перемиграция'] == 'да','БК'].count()
         status_not_need = df.loc[df['перемиграция'] == 'не требуется','БК'].count()
+        #загрузка_ВИС
+        status_VIS = df.loc[df['загружено_ВИС'] == 'загружено','БК'].count()
+        status_VIS_not = df.loc[df['загружено_ВИС'] == 'нет','БК'].count()
         #расчет значений
         perc_status_here = status_here / all_count * 100
         perc_status_not_here = status_not_here / all_count * 100
         perc_status_not_matter = status_not_matter / all_count * 100
         perc_status_download = status_download / all_count * 100
         perc_status_not_download = status_not_download / all_count * 100
+        perc_status_VIS = status_VIS / all_count * 100
+        perc_status_VIS_not = status_VIS_not / all_count * 100
         perc_status_plus = status_plus / all_count * 100
         perc_status_minus = status_minus / all_count * 100
         perc_status_need = status_need / all_count * 100
@@ -495,6 +514,8 @@ def callback(call):
         status_not_matter = str(np.format_float_positional(status_not_matter))[0:-1]
         status_download = str(np.format_float_positional(status_download))[0:-1]
         status_not_download = str(np.format_float_positional(status_not_download))[0:-1]
+        status_VIS = str(np.format_float_positional(status_VIS))[0:-1]
+        status_VIS_not = str(np.format_float_positional(status_VIS_not))[0:-1]
         status_plus = str(np.format_float_positional(status_plus))[0:-1]
         status_minus = str(np.format_float_positional(status_minus))[0:-1]
         status_not_yet_rec = str(np.format_float_positional(status_not_yet_rec))[0:-1]
@@ -505,13 +526,15 @@ def callback(call):
         perc_status_not_matter = str(np.format_float_positional(perc_status_not_matter, precision=1, trim='0'))
         perc_status_download = str(np.format_float_positional(perc_status_download, precision=1, trim='0'))
         perc_status_not_download = str(np.format_float_positional(perc_status_not_download, precision=1, trim='0'))
+        perc_status_VIS = str(np.format_float_positional(perc_status_VIS, precision=1, trim='0'))
+        perc_status_VIS_not = str(np.format_float_positional(perc_status_VIS_not, precision=1, trim='0'))
         perc_status_plus = str(np.format_float_positional(perc_status_plus, precision=1, trim='0'))
         perc_status_minus = str(np.format_float_positional(perc_status_minus, precision=1, trim='0'))
         perc_status_not_yet_rec = str(np.format_float_positional(perc_status_not_yet_rec, precision=1, trim='0'))
         perc_status_need = str(np.format_float_positional(perc_status_need, precision=1, trim='0'))
         perc_status_not_need = np.format_float_positional(perc_status_not_need, precision=1, trim='0')
         # сообщение на отправку
-        message_to_send = '\n' + '*Количество учреждений: *' + all_count + '\n' + '*Статус получения баз: *' + '\n' + ' - получена: ' + status_here + '_ (_' + Italic(perc_status_here) + '_%)_' + '\n' + ' - не получена: ' + status_not_here + '_ (_' + Italic(perc_status_not_here) + '_%)_' + '\n' + '- не требуется: ' + status_not_matter + '_ (_' + Italic(perc_status_not_matter) + '_%)_' + '\n' + "*Статус загрузки баз: *" + '\n' + '- загружена: ' + status_download + '_ (_' + Italic(perc_status_download) + '_%)_' + '\n' '- не загружена: ' + status_not_download + '_ (_' + Italic(perc_status_not_download) + '_%)_' + '\n' + '*Статус протоколов: *' + "\n" + '- положительный: ' + status_plus + '_ (_' + Italic(perc_status_plus) + '_%)_' + '\n' + '- отрицательный: ' + status_minus + '_ (_' + Italic(perc_status_minus) + '_%)_'  + '\n' + '- не получен: ' + status_not_yet_rec + '_ (_' + Italic(perc_status_not_yet_rec) + '_%)_' + '\n' + "*Статус перемиграции: *" + "\n" + '- требуется: ' + status_need + '_ (_' + Italic(perc_status_need) + '_%)_' + '\n'+ '- не требуется: ' + status_not_need + '_ (_' + Italic(perc_status_not_need) + '_%)_' + '\n'
+        message_to_send = '\n' + '*Количество учреждений: *' + all_count + '\n' + '*Статус получения баз: *' + '\n' + ' - получена: ' + status_here + '_ (_' + Italic(perc_status_here) + '_%)_' + '\n' + ' - не получена: ' + status_not_here + '_ (_' + Italic(perc_status_not_here) + '_%)_' + '\n' + '- не требуется: ' + status_not_matter + '_ (_' + Italic(perc_status_not_matter) + '_%)_' + '\n' + "*Статус загрузки из ЕИСУ КС: *" + '\n' + '- загружена: ' + status_download + '_ (_' + Italic(perc_status_download) + '_%)_' + '\n' '- не загружена: ' + status_not_download + '_ (_' + Italic(perc_status_not_download) + '_%)_' + '\n' + "*Статус загрузки из ВИС: *" + '\n' + '- загружена: ' + status_VIS + '_ (_' + Italic(perc_status_VIS) + '_%)_' + '\n' '- не загружена: ' + status_VIS_not + '_ (_' + Italic(perc_status_VIS_not) + '_%)_' + '\n' + '*Статус протоколов: *' + "\n" + '- положительный: ' + status_plus + '_ (_' + Italic(perc_status_plus) + '_%)_' + '\n' + '- отрицательный: ' + status_minus + '_ (_' + Italic(perc_status_minus) + '_%)_'  + '\n' + '- не получен: ' + status_not_yet_rec + '_ (_' + Italic(perc_status_not_yet_rec) + '_%)_' + '\n' + "*Статус перемиграции: *" + "\n" + '- требуется: ' + status_need + '_ (_' + Italic(perc_status_need) + '_%)_' + '\n'+ '- не требуется: ' + status_not_need + '_ (_' + Italic(perc_status_not_need) + '_%)_' + '\n'
         msg_text = Bold(call.data) + '\n' + message_to_send
         markup = telebot.types.InlineKeyboardMarkup()
         markup.add(telebot.types.InlineKeyboardButton(text='Назад', callback_data='Назад'))
@@ -622,6 +645,12 @@ def code_input(message):
             markup = telebot.types.InlineKeyboardMarkup()
             markup.add(telebot.types.InlineKeyboardButton(text='Назад', callback_data='Назад'))
             bot.send_message(user_id, text=msg_text, reply_markup=markup, parse_mode= "Markdown")
+
+
+        if state[user_id] == 'Статус по учреждению' :
+            df = df.query('СВР == @BK')
+            
+            
     except:      
         markup = telebot.types.InlineKeyboardMarkup()
         markup.add(telebot.types.InlineKeyboardButton(text='Назад', callback_data='Назад'))
