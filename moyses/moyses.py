@@ -38,7 +38,7 @@ def send_stat_all_heads(user_id,df,a):
     status_need = df.loc[df['перемиграция'] == 'да','БК'].count()
     status_not_need = df.loc[df['перемиграция'] == 'не требуется','БК'].count()
     #загрузка_ВИС
-    status_VIS = df.loc[df['загружено_ВИС'] == 'загружено','БК'].count()
+    status_VIS = df.loc[df['загружено_ВИС'] == 'да','БК'].count()
     status_VIS_not = df.loc[df['загружено_ВИС'] == 'нет','БК'].count()
     #расчет значений
     perc_status_here = status_here / all_count * 100
@@ -102,7 +102,7 @@ def send_stat_one_head(BK,user_id,df,a):
     status_minus = foiv.loc[foiv['протокол'] == 'отрицательный','БК'].count()
     status_not_yet_rec = foiv.loc[foiv['протокол'] == 'не получен','БК'].count()
     #загрузка_ВИС
-    status_VIS = foiv.loc[df['загружено_ВИС'] == 'загружено','БК'].count()
+    status_VIS = foiv.loc[df['загружено_ВИС'] == 'да','БК'].count()
     status_VIS_not = foiv.loc[df['загружено_ВИС'] == 'нет','БК'].count()
     # перемиграция  
     status_need = foiv.loc[foiv['перемиграция'] == 'да','БК'].count()
