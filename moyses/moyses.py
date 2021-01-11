@@ -13,8 +13,8 @@ DF = {}
 sheet_id =['1zvPAJP6PNsZ7u37eV9uPCdZB29RCcOpBkTMDf6eXEXE', #статус миграции
            '1hrR2lJW32sRmHS5kZPdvRys-dNEYRgTIEGzaOjOJjCk'] #фоив - БК
 
-bot = telebot.TeleBot('1171523590:AAEvAeI-ICnoQZe355KilvGLPmczfbsElxY')#отладка
-#bot = telebot.TeleBot('1253376897:AAFssJD2m18CBgaVo4xaIR3_yFvonYtYCRw')
+#bot = telebot.TeleBot('1171523590:AAEvAeI-ICnoQZe355KilvGLPmczfbsElxY')#отладка
+bot = telebot.TeleBot('1253376897:AAFssJD2m18CBgaVo4xaIR3_yFvonYtYCRw')
 
 
 
@@ -741,7 +741,7 @@ def callback(call):
         msg_text = Bold(call.data) + '\n' +  message_to_send
         markup = telebot.types.InlineKeyboardMarkup()
         markup.add(telebot.types.InlineKeyboardButton(text='Назад', callback_data='Назад'))
-        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text='в разработке', reply_markup=markup, parse_mode= 'Markdown')
+        bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text='Раздел находится в стадии разработки', reply_markup=markup, parse_mode= 'Markdown')
 
 
 
@@ -790,7 +790,7 @@ def code_input(message):
             msg_text = '*Проблемы миграции по главе *' + Bold(BK) + '\n' + name + '\n' +  message_to_send
             markup = telebot.types.InlineKeyboardMarkup()
             markup.add(telebot.types.InlineKeyboardButton(text='Назад', callback_data='Назад'))
-            bot.send_message(user_id, text='в разработке', reply_markup=markup, parse_mode= 'Markdown')
+            bot.send_message(user_id, text='Раздел находится в стадии разработки', reply_markup=markup, parse_mode= 'Markdown')
 
 
         elif state[user_id] == 'Статус по учреждению' :
