@@ -286,13 +286,13 @@ def start_message(message):
 @bot.callback_query_handler(func=lambda call: True)
 def callback(call):
     user_id = call.from_user.id
-    
+    bot.answer_callback_query(call.id, text=call.data)
     global state, DF, state_bk
 
    
 
     if call.data == 'Статус по учреждению':
-        bot.answer_callback_query(call.id, text=call.data)
+        
         state[call.from_user.id] = call.data
         user_id = call.from_user.id
         markup = telebot.types.InlineKeyboardMarkup()
@@ -304,7 +304,7 @@ def callback(call):
 
     
     if call.data == 'Полученные':
-        bot.answer_callback_query(call.id, text=call.data)
+        
         user_id = call.from_user.id
         msg_text = status_count('получена',user_id)
         markup = telebot.types.InlineKeyboardMarkup()
@@ -316,7 +316,7 @@ def callback(call):
 
 
     if call.data == 'Загруженные':
-        bot.answer_callback_query(call.id, text=call.data)
+        
         user_id = call.from_user.id
         msg_text = status_count('загружено',user_id)
         markup = telebot.types.InlineKeyboardMarkup()
@@ -326,7 +326,7 @@ def callback(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=msg_text, reply_markup=markup)
 
     if call.data == 'Перемиграция':
-        bot.answer_callback_query(call.id, text=call.data)
+        
         user_id = call.from_user.id
         msg_text = status_count('перемиграция',user_id)
         markup = telebot.types.InlineKeyboardMarkup()
@@ -336,7 +336,7 @@ def callback(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=msg_text, reply_markup=markup)
 
     if call.data == 'Протоколы':
-        bot.answer_callback_query(call.id, text=call.data)
+        
         user_id = call.from_user.id
         msg_text = status_count('протокол',user_id)
         markup = telebot.types.InlineKeyboardMarkup()
@@ -347,7 +347,7 @@ def callback(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=msg_text, reply_markup=markup)
 
     if call.data == 'положительные':
-        bot.answer_callback_query(call.id, text=call.data)
+        
         user_id = call.from_user.id
         try:
             df = DF[user_id]
@@ -374,7 +374,7 @@ def callback(call):
         except:
             bot.send_message(user_id, text='Что-то пошло не так, попробуйте начать командой /start')
     if call.data == 'отрицательные':
-        bot.answer_callback_query(call.id, text=call.data)
+        
         user_id = call.from_user.id
         try:
             df = DF[user_id]
@@ -403,7 +403,7 @@ def callback(call):
 
 
     if call.data == 'протоколы не получены':
-        bot.answer_callback_query(call.id, text=call.data)
+        
         user_id = call.from_user.id
         try:
             df = DF[user_id]
@@ -430,7 +430,7 @@ def callback(call):
         except Exception as e:
            bot.send_message(user_id, text='Что-то пошло не так, попробуйте начать командой /start')
     if call.data == 'перемиграция':
-        bot.answer_callback_query(call.id, text=call.data)
+        
         user_id = call.from_user.id
         try:
             df = DF[user_id]
@@ -457,7 +457,7 @@ def callback(call):
         except:
             bot.send_message(user_id, text='Что-то пошло не так, попробуйте начать командой /start')
     if call.data == 'не_перемиграция':
-        bot.answer_callback_query(call.id, text=call.data)
+        
         user_id = call.from_user.id
         try:
             df = DF[user_id]
@@ -485,7 +485,7 @@ def callback(call):
             bot.send_message(user_id, text='Что-то пошло не так, попробуйте начать командой /start')
             
     if call.data == 'загружены':
-        bot.answer_callback_query(call.id, text=call.data)
+        
         user_id = call.from_user.id
         try:
             df = DF[user_id]
@@ -513,7 +513,7 @@ def callback(call):
             bot.send_message(user_id, text='Что-то пошло не так, попробуйте начать командой /start')    
 
     if call.data == 'не загружены':
-        bot.answer_callback_query(call.id, text=call.data)
+        
         user_id = call.from_user.id
         try:
             df = DF[user_id]
@@ -543,7 +543,7 @@ def callback(call):
 
         
     if call.data == 'базы получены':
-        bot.answer_callback_query(call.id, text=call.data)
+        
         user_id = call.from_user.id
         try:
             df = DF[user_id]
@@ -570,7 +570,7 @@ def callback(call):
         except:
             bot.send_message(user_id, text='Что-то пошло не так, попробуйте начать командой /start')
     if call.data == 'базы не получены':
-        bot.answer_callback_query(call.id, text=call.data)
+        
         user_id = call.from_user.id
         try:
             df = DF[user_id]
@@ -597,7 +597,7 @@ def callback(call):
             bot.send_message(user_id, text='Что-то пошло не так, попробуйте начать командой /start')
 
     if call.data == 'не требуется':
-        bot.answer_callback_query(call.id, text=call.data)
+        
         user_id = call.from_user.id
         try:
             df = DF[user_id]
@@ -626,7 +626,7 @@ def callback(call):
 
     
     if call.data == 'Назад':
-        bot.answer_callback_query(call.id, text=call.data)
+        
         
         msg_text = '*Выберите тип запроса*'
         markup = telebot.types.InlineKeyboardMarkup()
@@ -639,7 +639,7 @@ def callback(call):
         
     if call.data == 'Статистика миграции':
         state[call.from_user.id] = call.data
-        bot.answer_callback_query(call.id, text=call.data)
+        
         msg_text = Bold(call.data) + '\n' + 'Введите код главы:'
         markup = telebot.types.InlineKeyboardMarkup()
         markup.add(telebot.types.InlineKeyboardButton(text='По всем главам', callback_data='Статистика по всем учреждениям'))
@@ -648,7 +648,7 @@ def callback(call):
         
     if call.data == 'Проблемы миграции':
         state[call.from_user.id] = call.data
-        bot.answer_callback_query(call.id, text=call.data)
+        
         msg_text = call.data + '\n' + 'Введите код главы:'
         markup = telebot.types.InlineKeyboardMarkup()
         markup.add(telebot.types.InlineKeyboardButton(text='Вывести по всем', callback_data='Проблемы по всем учреждениям'))
@@ -657,7 +657,7 @@ def callback(call):
 
     if call.data == 'Выборка по статусу':
         state[call.from_user.id] = call.data
-        bot.answer_callback_query(call.id, text=call.data)
+        
         msg_text = call.data + '\n' + 'Введите код главы:'
         markup = telebot.types.InlineKeyboardMarkup()
         markup.add(telebot.types.InlineKeyboardButton(text='Выборка по всем', callback_data='Выборка по всем'))
@@ -665,12 +665,12 @@ def callback(call):
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=msg_text, reply_markup=markup)
 
     if call.data == 'Выборка по всем':
-        bot.answer_callback_query(call.id, text=call.data)
+        
         state_bk[user_id] = 'all'
         df = vyborka(user_id)
         
     if call.data == 'Статистика по всем учреждениям':
-        bot.answer_callback_query(call.id, text=call.data)
+        
         msg_text = 'Уточните выборку:'
         markup = telebot.types.InlineKeyboardMarkup()
         markup.add(telebot.types.InlineKeyboardButton(text='Все учреждения', callback_data='все_стат'))
@@ -729,7 +729,7 @@ def callback(call):
         send_stat_one_head(BK,user_id,df,a)
         
     if call.data == 'Проблемы по всем учреждениям':
-        bot.answer_callback_query(call.id, text=call.data)
+        
         df = Get_Table()
         nope = 'нет'
         df = df.query('проблемы != @nope')
