@@ -13,8 +13,8 @@ DF = {}
 sheet_id =['1zvPAJP6PNsZ7u37eV9uPCdZB29RCcOpBkTMDf6eXEXE', #статус миграции
            '1hrR2lJW32sRmHS5kZPdvRys-dNEYRgTIEGzaOjOJjCk'] #фоив - БК
 
-#bot = telebot.TeleBot('1171523590:AAEvAeI-ICnoQZe355KilvGLPmczfbsElxY')#отладка
-bot = telebot.TeleBot('1253376897:AAFssJD2m18CBgaVo4xaIR3_yFvonYtYCRw')
+bot = telebot.TeleBot('1171523590:AAEvAeI-ICnoQZe355KilvGLPmczfbsElxY')#отладка
+#bot = telebot.TeleBot('1253376897:AAFssJD2m18CBgaVo4xaIR3_yFvonYtYCRw')
 
 
 
@@ -675,6 +675,7 @@ def callback(call):
         markup = telebot.types.InlineKeyboardMarkup()
         markup.add(telebot.types.InlineKeyboardButton(text='Все учреждения', callback_data='все_стат'))
         markup.add(telebot.types.InlineKeyboardButton(text='ЦА', callback_data='ЦА_все_стат'),telebot.types.InlineKeyboardButton(text='ТО', callback_data='ТО_все_стат'),telebot.types.InlineKeyboardButton(text='ФКУ', callback_data='ФКУ_все_стат'))
+        markup.add(telebot.types.InlineKeyboardButton(text='Назад', callback_data='Статистика миграции'))
         bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=msg_text, reply_markup=markup)
 
     if call.data == 'ЦА_все_стат':
@@ -771,6 +772,7 @@ def code_input(message):
             markup = telebot.types.InlineKeyboardMarkup()
             markup.add(telebot.types.InlineKeyboardButton(text='Все учреждения', callback_data='все_глава'))
             markup.add(telebot.types.InlineKeyboardButton(text='ЦА', callback_data='ЦА_глава'),telebot.types.InlineKeyboardButton(text='ТО', callback_data='ТО_глава'),telebot.types.InlineKeyboardButton(text='ФКУ', callback_data='ФКУ_глава'))
+            markup.add(telebot.types.InlineKeyboardButton(text='Назад', callback_data='Статистика миграции'))
             bot.send_message(user_id, text=msg_text, reply_markup=markup)
 
         elif state[user_id] == 'Проблемы миграции' :
