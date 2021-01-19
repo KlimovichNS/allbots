@@ -92,69 +92,77 @@ while True:
             bot.send_message(user_id, msg_text, reply_markup=markup, parse_mode= 'Markdown')
 
         def send_stat_one_head(BK,user_id,df,a):
-            name = get_name(BK)
-            foiv = df.query('БК == @BK')
-            name = '(' + name + ')'
-            all_count = foiv['БК'].count()
-            status_here = foiv.loc[foiv['получена'] == 'да','БК'].count()
-            status_not_here = foiv.loc[foiv['получена'] == 'нет','БК'].count()
-            status_not_matter = foiv.loc[foiv['получена'] == 'не требуется','БК'].count()
-            # загружено  
-            status_download = foiv.loc[foiv['загружено'] == 'загружено','БК'].count()
-            status_not_download = foiv.loc[foiv['загружено'] == 'нет','БК'].count()
-            # протоколы  
-            status_plus = foiv.loc[foiv['протокол'] == 'положительный','БК'].count()
-            status_minus = foiv.loc[foiv['протокол'] == 'отрицательный','БК'].count()
-            status_not_yet_rec = foiv.loc[foiv['протокол'] == 'не получен','БК'].count()
-            #загрузка_ВИС
-            status_VIS = foiv.loc[df['загружено_ВИС'] == 'да','БК'].count()
-            status_VIS_not = foiv.loc[df['загружено_ВИС'] == 'нет','БК'].count()
-            # перемиграция  
-            status_need = foiv.loc[foiv['перемиграция'] == 'да','БК'].count()
-            status_not_need = foiv.loc[foiv['перемиграция'] == 'не требуется','БК'].count()
-            #расчет значений
-            perc_status_here = status_here / all_count * 100
-            perc_status_not_here = status_not_here / all_count * 100
-            perc_status_not_matter = status_not_matter / all_count * 100
-            perc_status_download = status_download / all_count * 100
-            perc_status_not_download = status_not_download / all_count * 100
-            perc_status_VIS = status_VIS / all_count * 100
-            perc_status_VIS_not = status_VIS_not / all_count * 100
-            perc_status_plus = status_plus / all_count * 100
-            perc_status_minus = status_minus / all_count * 100
-            perc_status_need = status_need / all_count * 100
-            perc_status_not_need = status_not_need / all_count * 100
-            perc_status_not_yet_rec = status_not_yet_rec / all_count * 100
-            all_count = str(np.format_float_positional(all_count))[0:-1]
-            status_here = str(np.format_float_positional(status_here))[0:-1]
-            status_not_here = str(np.format_float_positional(status_not_here))[0:-1]
-            status_not_matter = str(np.format_float_positional(status_not_matter))[0:-1]
-            status_download = str(np.format_float_positional(status_download))[0:-1]
-            status_not_download = str(np.format_float_positional(status_not_download))[0:-1]
-            status_plus = str(np.format_float_positional(status_plus))[0:-1]
-            status_minus = str(np.format_float_positional(status_minus))[0:-1]
-            status_not_yet_rec = str(np.format_float_positional(status_not_yet_rec))[0:-1]
-            status_need = str(np.format_float_positional(status_need))[0:-1]
-            status_not_need = str(np.format_float_positional(status_not_need))[0:-1]
-            status_VIS = str(np.format_float_positional(status_VIS))[0:-1]
-            status_VIS_not = str(np.format_float_positional(status_VIS_not))[0:-1]
-            perc_status_here = str(np.format_float_positional(perc_status_here, precision=1, trim='0'))
-            perc_status_VIS = str(np.format_float_positional(perc_status_VIS, precision=1, trim='0'))
-            perc_status_VIS_not = str(np.format_float_positional(perc_status_VIS_not, precision=1, trim='0'))
-            perc_status_not_here = str(np.format_float_positional(perc_status_not_here, precision=1, trim='0'))
-            perc_status_download = str(np.format_float_positional(perc_status_download, precision=1, trim='0'))
-            perc_status_not_download = str(np.format_float_positional(perc_status_not_download, precision=1, trim='0'))
-            perc_status_plus = str(np.format_float_positional(perc_status_plus, precision=1, trim='0'))
-            perc_status_minus = str(np.format_float_positional(perc_status_minus, precision=1, trim='0'))
-            perc_status_not_yet_rec = str(np.format_float_positional(perc_status_not_yet_rec, precision=1, trim='0'))
-            perc_status_need = str(np.format_float_positional(perc_status_need, precision=1, trim='0'))
-            perc_status_not_need =str(np.format_float_positional(perc_status_not_need, precision=1, trim='0'))
-            # сообщение на отправку
-            message_to_send = '\n' + '*Количество учреждений: *' + all_count + '\n' + '*Статус получения баз: *' + '\n' + '- получена: ' + status_here + '_ (_' + Italic(perc_status_here) + '_%)_' + '\n' + ' - не получена: ' + status_not_here + '_ (_' + Italic(perc_status_not_here) + '_%)_' + '\n' + '*Статус загрузки баз: *' + '\n' + '- загружена: ' + status_download + '_ (_' + Italic(perc_status_download) + '_%)_' + '\n' '- не загружена: ' + status_not_download + '_ (_' + Italic(perc_status_not_download) + '_%)_' + '\n' + '*Статус загрузки из ВИС: *' + '\n' + '- загружена: ' + status_VIS + '_ (_' + Italic(perc_status_VIS) + '_%)_' + '\n' '- не загружена: ' + status_VIS_not + '_ (_' + Italic(perc_status_VIS_not) + '_%)_' + '\n' + '*Статус протоколов: *' + '\n' + '- положительный: ' + status_plus + '_ (_' + Italic(perc_status_plus) + '_%)_' + '\n' + '- отрицательный: ' + status_minus + '_ (_' + Italic(perc_status_minus) + '_%)_'  + '\n' + '- не получен: ' + status_not_yet_rec + '_ (_' + Italic(perc_status_not_yet_rec) + '_%)_' + '\n' + '*Статус перемиграции: *' + '\n' + '- требуется: ' + status_need + '_ (_' + Italic(perc_status_need) + '_%)_' + '\n'+ '- не требуется: ' + status_not_need + '_ (_' + Italic(perc_status_not_need) + '_%)_' + '\n'
-            msg_text = '*Статистика по главе *' + Bold(BK) + '\n' + name + ','+a+'\n' + message_to_send
-            markup = telebot.types.InlineKeyboardMarkup()
-            markup.add(telebot.types.InlineKeyboardButton(text='Назад', callback_data='Статистика миграции'))
-            bot.send_message(user_id, text=msg_text, reply_markup=markup, parse_mode= 'Markdown')
+            if len(BK)!=3:
+                name='error'
+            else:
+                name = get_name(BK)
+            if name=='error':
+                markup = telebot.types.InlineKeyboardMarkup()
+                markup.add(telebot.types.InlineKeyboardButton(text='Назад', callback_data='Статистика миграции'))
+                bot.send_message(user_id, text='Проверьте правильность введенного кода главы. Обратите внимание, код главы - трехзначный', reply_markup=markup)
+            else:
+                foiv = df.query('БК == @BK')
+                name = '(' + name + ')'
+                all_count = foiv['БК'].count()
+                status_here = foiv.loc[foiv['получена'] == 'да','БК'].count()
+                status_not_here = foiv.loc[foiv['получена'] == 'нет','БК'].count()
+                status_not_matter = foiv.loc[foiv['получена'] == 'не требуется','БК'].count()
+                # загружено  
+                status_download = foiv.loc[foiv['загружено'] == 'загружено','БК'].count()
+                status_not_download = foiv.loc[foiv['загружено'] == 'нет','БК'].count()
+                # протоколы  
+                status_plus = foiv.loc[foiv['протокол'] == 'положительный','БК'].count()
+                status_minus = foiv.loc[foiv['протокол'] == 'отрицательный','БК'].count()
+                status_not_yet_rec = foiv.loc[foiv['протокол'] == 'не получен','БК'].count()
+                #загрузка_ВИС
+                status_VIS = foiv.loc[df['загружено_ВИС'] == 'да','БК'].count()
+                status_VIS_not = foiv.loc[df['загружено_ВИС'] == 'нет','БК'].count()
+                # перемиграция  
+                status_need = foiv.loc[foiv['перемиграция'] == 'да','БК'].count()
+                status_not_need = foiv.loc[foiv['перемиграция'] == 'не требуется','БК'].count()
+                #расчет значений
+                perc_status_here = status_here / all_count * 100
+                perc_status_not_here = status_not_here / all_count * 100
+                perc_status_not_matter = status_not_matter / all_count * 100
+                perc_status_download = status_download / all_count * 100
+                perc_status_not_download = status_not_download / all_count * 100
+                perc_status_VIS = status_VIS / all_count * 100
+                perc_status_VIS_not = status_VIS_not / all_count * 100
+                perc_status_plus = status_plus / all_count * 100
+                perc_status_minus = status_minus / all_count * 100
+                perc_status_need = status_need / all_count * 100
+                perc_status_not_need = status_not_need / all_count * 100
+                perc_status_not_yet_rec = status_not_yet_rec / all_count * 100
+                all_count = str(np.format_float_positional(all_count))[0:-1]
+                status_here = str(np.format_float_positional(status_here))[0:-1]
+                status_not_here = str(np.format_float_positional(status_not_here))[0:-1]
+                status_not_matter = str(np.format_float_positional(status_not_matter))[0:-1]
+                status_download = str(np.format_float_positional(status_download))[0:-1]
+                status_not_download = str(np.format_float_positional(status_not_download))[0:-1]
+                status_plus = str(np.format_float_positional(status_plus))[0:-1]
+                status_minus = str(np.format_float_positional(status_minus))[0:-1]
+                status_not_yet_rec = str(np.format_float_positional(status_not_yet_rec))[0:-1]
+                status_need = str(np.format_float_positional(status_need))[0:-1]
+                status_not_need = str(np.format_float_positional(status_not_need))[0:-1]
+                status_VIS = str(np.format_float_positional(status_VIS))[0:-1]
+                status_VIS_not = str(np.format_float_positional(status_VIS_not))[0:-1]
+                perc_status_here = str(np.format_float_positional(perc_status_here, precision=1, trim='0'))
+                perc_status_VIS = str(np.format_float_positional(perc_status_VIS, precision=1, trim='0'))
+                perc_status_VIS_not = str(np.format_float_positional(perc_status_VIS_not, precision=1, trim='0'))
+                perc_status_not_here = str(np.format_float_positional(perc_status_not_here, precision=1, trim='0'))
+                perc_status_download = str(np.format_float_positional(perc_status_download, precision=1, trim='0'))
+                perc_status_not_download = str(np.format_float_positional(perc_status_not_download, precision=1, trim='0'))
+                perc_status_plus = str(np.format_float_positional(perc_status_plus, precision=1, trim='0'))
+                perc_status_minus = str(np.format_float_positional(perc_status_minus, precision=1, trim='0'))
+                perc_status_not_yet_rec = str(np.format_float_positional(perc_status_not_yet_rec, precision=1, trim='0'))
+                perc_status_need = str(np.format_float_positional(perc_status_need, precision=1, trim='0'))
+                perc_status_not_need =str(np.format_float_positional(perc_status_not_need, precision=1, trim='0'))
+                # сообщение на отправку
+                message_to_send = '\n' + '*Количество учреждений: *' + all_count + '\n' + '*Статус получения баз: *' + '\n' + '- получена: ' + status_here + '_ (_' + Italic(perc_status_here) + '_%)_' + '\n' + ' - не получена: ' + status_not_here + '_ (_' + Italic(perc_status_not_here) + '_%)_' + '\n' + '*Статус загрузки баз: *' + '\n' + '- загружена: ' + status_download + '_ (_' + Italic(perc_status_download) + '_%)_' + '\n' '- не загружена: ' + status_not_download + '_ (_' + Italic(perc_status_not_download) + '_%)_' + '\n' + '*Статус загрузки из ВИС: *' + '\n' + '- загружена: ' + status_VIS + '_ (_' + Italic(perc_status_VIS) + '_%)_' + '\n' '- не загружена: ' + status_VIS_not + '_ (_' + Italic(perc_status_VIS_not) + '_%)_' + '\n' + '*Статус протоколов: *' + '\n' + '- положительный: ' + status_plus + '_ (_' + Italic(perc_status_plus) + '_%)_' + '\n' + '- отрицательный: ' + status_minus + '_ (_' + Italic(perc_status_minus) + '_%)_'  + '\n' + '- не получен: ' + status_not_yet_rec + '_ (_' + Italic(perc_status_not_yet_rec) + '_%)_' + '\n' + '*Статус перемиграции: *' + '\n' + '- требуется: ' + status_need + '_ (_' + Italic(perc_status_need) + '_%)_' + '\n'+ '- не требуется: ' + status_not_need + '_ (_' + Italic(perc_status_not_need) + '_%)_' + '\n'
+                msg_text = '*Статистика по главе *' + Bold(BK) + '\n' + name + ' '+a+'\n' + message_to_send
+                markup = telebot.types.InlineKeyboardMarkup()
+                markup.add(telebot.types.InlineKeyboardButton(text='Назад', callback_data='Статистика миграции'))
+                bot.send_message(user_id, text=msg_text, reply_markup=markup, parse_mode= 'Markdown')
 
 
 
@@ -230,6 +238,7 @@ while True:
 
         def get_name(BK):
             global sheet_id
+            print(BK)
             spreadsheet_id = sheet_id[1]
             file_name = 'https://docs.google.com/spreadsheets/d/{}/export?format=csv'.format(spreadsheet_id) 
             r = requests.get(file_name) 
@@ -598,7 +607,8 @@ while True:
                     markup = telebot.types.InlineKeyboardMarkup()
                     markup.add(telebot.types.InlineKeyboardButton(text='Назад', callback_data='Полученные'),telebot.types.InlineKeyboardButton(text='В начало', callback_data='Назад'))
                     bot.send_message(user_id, text=message_to_send, reply_markup=markup, parse_mode= 'Markdown')
-                except:
+                except Exception as e:
+                    print(e)
                     bot.send_message(user_id, text='Что-то пошло не так, попробуйте начать командой /start')
 
             if call.data == 'не требуется':
